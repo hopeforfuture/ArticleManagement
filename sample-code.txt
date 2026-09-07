@@ -1,0 +1,15 @@
+{
+    "name" : "Manojit Nandi",
+    "email" : "test_manojit@in.com",
+    "password" : "tEst123456!"
+}
+
+{
+    "email" : "testadmin@in.com",
+    "password" : "aDmin@123!"
+}
+
+{
+    "email" : "testadmin@in.com",
+    "password" : "aDmin@123!"
+}
