@@ -1,0 +1,383 @@
+{
+  "info": {
+    "_postman_id": "c586f099-af10-465c-8984-8ab4c37b3173",
+    "name": "ArticleManager",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "8890235"
+  },
+  "item": [
+    {
+      "name": "UserService",
+      "item": [
+        {
+          "name": "Signup",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\" : \"Site Admin\",\r\n    \"email\" : \"testadmin@in.com\",\r\n    \"password\" : \"aDmin@123!\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{HOME_USER_URL}}api/v1/users/signup",
+              "host": [
+                "{{HOME_USER_URL}}api"
+              ],
+              "path": [
+                "v1",
+                "users",
+                "signup"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Signin",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\" : \"test_manojit@in.com\",\r\n    \"password\" : \"tEst123456!\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{HOME_USER_URL}}api/v1/users/signin",
+              "host": [
+                "{{HOME_USER_URL}}api"
+              ],
+              "path": [
+                "v1",
+                "users",
+                "signin"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Profile Image",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{json_web_token_1ea1}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "avatar",
+                  "type": "file",
+                  "src": [
+                    "/C:/Users/Manojit Nandi/Downloads/index.css"
+                  ]
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{HOME_USER_URL}}api/v1/users/avatar",
+              "host": [
+                "{{HOME_USER_URL}}api"
+              ],
+              "path": [
+                "v1",
+                "users",
+                "avatar"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "User Profile Update",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{supabase_service_role_api_key_1ea1}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n   \"name\": \"Raghavendra Srinivas\" \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{HOME_USER_URL}}api/v1/users/profile",
+              "host": [
+                "{{HOME_USER_URL}}api"
+              ],
+              "path": [
+                "v1",
+                "users",
+                "profile"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Forgot Password",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"rajkumar@in.com\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{HOME_USER_URL}}api/v1/users/forgot-password",
+              "host": [
+                "{{HOME_USER_URL}}api"
+              ],
+              "path": [
+                "v1",
+                "users",
+                "forgot-password"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"token\": \"d73d794a-4ddb-467f-8f92-82469adf0bb7\",\r\n    \"newPassword\": \"tEst@123!\",\r\n    \"confirmPassword\" : \"tEst@123!\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{HOME_USER_URL}}api/v1/users/reset-password",
+              "host": [
+                "{{HOME_USER_URL}}api"
+              ],
+              "path": [
+                "v1",
+                "users",
+                "reset-password"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Password",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{supabase_service_role_api_key_0j6v}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"currentPassword\" : \"tEst@123!\",\r\n    \"newPassword\": \"pEst@123!\",\r\n    \"confirmPassword\" : \"pEst@123!\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{HOME_USER_URL}}api/v1/users/update-password",
+              "host": [
+                "{{HOME_USER_URL}}api"
+              ],
+              "path": [
+                "v1",
+                "users",
+                "update-password"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List of Users",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{json_web_token_08si}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{HOME_USER_URL}}api/v1/admin/users",
+              "host": [
+                "{{HOME_USER_URL}}api"
+              ],
+              "path": [
+                "v1",
+                "admin",
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Block an User",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{supabase_service_role_api_key_07r9}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{HOME_USER_URL}}api/v1/admin/users/1/block",
+              "host": [
+                "{{HOME_USER_URL}}api"
+              ],
+              "path": [
+                "v1",
+                "admin",
+                "users",
+                "1",
+                "block"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Unblock User",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{supabase_service_role_api_key_1935}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{HOME_USER_URL}}api/v1/admin/users/1/unblock",
+              "host": [
+                "{{HOME_USER_URL}}api"
+              ],
+              "path": [
+                "v1",
+                "admin",
+                "users",
+                "1",
+                "unblock"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "json_web_token_0sma",
+      "secret": true
+    },
+    {
+      "key": "supabase_service_role_api_key_1ea1",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_1ea1",
+      "secret": true
+    },
+    {
+      "key": "supabase_service_role_api_key_0j6v",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_08si",
+      "secret": true
+    },
+    {
+      "key": "supabase_service_role_api_key_0hl3",
+      "secret": true
+    },
+    {
+      "key": "supabase_service_role_api_key_07r9",
+      "secret": true
+    }
+  ]
+}
