@@ -1,0 +1,21 @@
+POST /api/v1/auth/user/signin
+        ↓
+LoginRequest
+        ↓
+AuthenticationManager
+        ↓
+DaoAuthenticationProvider
+        ↓
+MyUserDetailsService
+        ↓
+UserRepository.findByEmail()
+        ↓
+UserPrincipal
+        ↓
+BCryptPasswordEncoder.matches()
+        ↓
+Authentication successful
+        ↓
+JwtService.generateToken()
+        ↓
+JWT returned to client

@@ -1,0 +1,51 @@
+Following are the changes made in userservice section
+
+1) In JwtService.java below changes are to be added
+	@Value("${jwt.secret}")
+    private String secretKey;
+
+    public String generateToken(User user) {
+
+        return Jwts.builder()
+                .subject(user.getEmail())
+                .claim("role", user.getRole())
+                .issuedAt(new Date())
+                .expiration(
+                        new Date(System.currentTimeMillis() + 1000 * 60 * 30)
+                )
+                .signWith(getKey())
+                .compact();
+    }
+
+    private SecretKey getKey() {
+
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
+	
+2) In login method of AuthController.java, below changes are to be added
+   if (authentication.isAuthenticated()) {
+
+                UserPrincipal userPrincipal =
+                        (UserPrincipal) authentication.getPrincipal();
+
+                User user = userPrincipal.getUser();
+
+                String token =
+                        jwtService.generateToken(user);
+
+                return ResponseEntity.ok(
+                        new AuthResponse(
+                                true,
+                                "Login successful",
+                                token,
+                                request.getEmail()
+                        )
+                );
+   }
+   
+3) In UserPrincipal.java add below method
+   public User getUser() {
+        return user;
+    }

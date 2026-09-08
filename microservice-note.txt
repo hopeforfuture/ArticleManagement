@@ -1,0 +1,70 @@
+1.While creating service following packages are required:
+  a)Spring Web
+  b)PostgreSQL Driver
+  c)Lombok
+  d)Spring Data JPA
+  e)OpenFeign
+  f)Eureka Discovery Client
+  g)Validation
+  
+For service registry below packages are required
+  a)Spring Web
+  b)Eureka Server
+  
+  1) @EnableEurekaServer annotation to be added in main application(In service registry main application)
+  2) In application.properties below lines are to be added:
+     spring.application.name=service-registry
+	 server.port=8761
+	 eureka.instance.hostname=localhost
+	 eureka.client.fetch-registry=false
+	 eureka.client.register-with-eureka=false
+	 
+  3) Give a meaningful name for each service
+	   spring.application.name=quiz-service	 
+	 
+  4) Below is the sample main method in java microservice calling other service
+	   
+		@SpringBootApplication
+		@EnableFeignClients
+		public class QuizServiceApplication {
+			public static void main(String[] args) {
+				SpringApplication.run(QuizServiceApplication.class, args);
+				System.out.println("Quiz Service Application Started");
+			}
+		}	 
+	 
+  5) Below are the lines to be added for sample QuizInterface.java
+		@FeignClient("QUESTION-SERVICE")
+		public interface QuizInterface {
+
+			@GetMapping("api/v1/quiz")
+			public ResponseEntity<List<Integer>> getQuestionsForQuiz(@RequestParam String categoryName, @RequestParam Integer numQ);
+
+			@PostMapping("api/v1/questions/getQuestions")
+			public ResponseEntity<List<QuestionWrapper>> getQuestionsFromId(@RequestBody List<Integer> questionsIds);
+
+			@PostMapping("api/v1/quiz/getScore")
+			public ResponseEntity<QuizResultResponse> getScore(@RequestBody List<QuizAnswer> responses);
+		}
+		   
+  6) Sample Calling service code
+		@Service
+		public class QuizService {
+			@Autowired
+			QuizDao quizDao;
+			@Autowired
+			QuizInterface quizInterface;
+
+			public ResponseEntity<String> createQuiz(String category, int numQ, String title) {
+				List<Integer> questions = quizInterface.getQuestionsForQuiz(category, numQ).getBody();
+				Quiz quiz = new Quiz();
+				quiz.setTitle(title);
+				quiz.setQuestionIds(questions);
+				quizDao.save(quiz);
+				return new ResponseEntity<>("Success", HttpStatus.CREATED);
+			}
+
+		}
+		
+	
+
