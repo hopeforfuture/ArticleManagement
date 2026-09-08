@@ -2,6 +2,7 @@ package com.src.userservice.controller;
 
 import com.src.userservice.dto.*;
 import com.src.userservice.model.User;
+import com.src.userservice.model.UserPrincipal;
 import com.src.userservice.service.JwtService;
 import com.src.userservice.service.UserService;
 import com.src.userservice.validation.*;
@@ -59,8 +60,13 @@ public class AuthController {
 
             if (authentication.isAuthenticated()) {
 
+                UserPrincipal userPrincipal =
+                        (UserPrincipal) authentication.getPrincipal();
+
+                User user = userPrincipal.getUser();
+
                 String token =
-                        jwtService.generateToken(request.getEmail());
+                        jwtService.generateToken(user);
 
                 return ResponseEntity.ok(
                         new AuthResponse(

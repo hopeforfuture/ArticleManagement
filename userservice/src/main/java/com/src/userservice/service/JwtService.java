@@ -1,5 +1,6 @@
 package com.src.userservice.service;
 
+import com.src.userservice.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -18,12 +19,15 @@ public class JwtService {
     @Value("${jwt.secret}")
     private String secretKey;
 
-    public String generateToken(String username) {
+    public String generateToken(User user) {
 
         return Jwts.builder()
-                .subject(username)
+                .subject(user.getEmail())
+                .claim("role", user.getRole())
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30))
+                .expiration(
+                        new Date(System.currentTimeMillis() + 1000 * 60 * 30)
+                )
                 .signWith(getKey())
                 .compact();
     }

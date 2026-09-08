@@ -13,3 +13,7 @@
     "email" : "testadmin@in.com",
     "password" : "aDmin@123!"
 }
+
+Now I would like to build category service but this will be role based. Only Admin can create,Update and Delete category. Other authenticated 
+users will be able to view(Single and List) Categories. In category table parent_id should be stored so that we can maintain parent/child 
+relationship. Now give me Category.java model file as well as other necessary files. 
