@@ -14,6 +14,17 @@
     "password" : "aDmin@123!"
 }
 
+{
+    "title": "Samsung Galaxy Series",
+    "body": "Samsung Galaxy is an awesome phone",
+    "categoryId": 4,
+    "tags": [
+        "Smartphone",
+        "Samsung",
+        "Samsung Galaxy"
+    ]
+}
+
 Now I would like to build category service but this will be role based. Only Admin can create,Update and Delete category. Other authenticated 
 users will be able to view(Single and List) Categories. In category table parent_id should be stored so that we can maintain parent/child 
 relationship. Now give me Category.java model file as well as other necessary files. 

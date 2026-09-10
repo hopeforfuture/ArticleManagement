@@ -62,7 +62,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/api/v1/categories/**"
-                        ).authenticated()
+                        ).permitAll()
 
 
                         // ==============================

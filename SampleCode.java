@@ -1,163 +1,97 @@
-```java
-@PostMapping("users/signin")
-public ResponseEntity<AuthResponse> login(
-        @Valid @RequestBody LoginRequest request) {
+package com.telusco.ecom_proj.controller;
 
-    try {
+import com.telusco.ecom_proj.model.Product;
+import com.telusco.ecom_proj.service.ProductService;
+import org.apache.catalina.Server;
+import org.apache.catalina.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-        Authentication authentication =
-                authenticationManager.authenticate(
-                        new UsernamePasswordAuthenticationToken(
-                                request.getEmail(),
-                                request.getPassword()
-                        )
-                );
+import java.util.List;
 
-        if (authentication.isAuthenticated()) {
+@RestController
+@CrossOrigin
+@RequestMapping("/api")
+public class ProductController {
 
-            UserPrincipal userPrincipal =
-                    (UserPrincipal) authentication.getPrincipal();
+    @Autowired
+    private ProductService service;
 
-            User user = userPrincipal.getUser();
+    @GetMapping
+    public String greet() {
+        return "Hello World";
+    }
 
-            String token =
-                    jwtService.generateToken(user);
+    @GetMapping("/products")
+    public ResponseEntity<List<Product>> getAllProducts() {
+        return new ResponseEntity<>(service.getAllProducts(), HttpStatus.OK) ;
+    }
 
-            return ResponseEntity.ok(
-                    new AuthResponse(
-                            true,
-                            "Login successful",
-                            token,
-                            user.getEmail()
-                    )
-            );
+    @GetMapping("/product/{id}")
+    public ResponseEntity <Product> GetProduct(@PathVariable int id) {
+        Product product = service.getProductById(id);
+        if(product != null) {
+            return new ResponseEntity<>(service.getProductById(id), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping("/product")
+    public ResponseEntity<?> addProduct(@RequestPart Product product, @RequestPart MultipartFile file) {
+        try {
+            Product product1 = service.addProduct(product, file);
+            return new ResponseEntity<>(product1, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/product/{productId}/image")
+    public ResponseEntity<byte[]> getImageByProductId(@PathVariable int productId) {
+        Product product = service.getProductById(productId);
+        byte[] imageFile = product.getImageData();
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.valueOf(product.getImageType()))
+                .body(imageFile);
+    }
+
+    @PutMapping("/product/{id}")
+    public ResponseEntity<String> updateProduct(@PathVariable int id, @RequestPart Product product, @RequestPart MultipartFile file) {
+        Product product1 = null;
+        try {
+             product1 = service.updateProduct(id, product, file);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Failed to Update", HttpStatus.BAD_REQUEST);
         }
 
-        return ResponseEntity
-                .status(HttpStatus.UNAUTHORIZED)
-                .body(new AuthResponse(
-                        false,
-                        "Authentication failed",
-                        null,
-                        null
-                ));
-
-    } catch (BadCredentialsException e) {
-
-        return ResponseEntity
-                .status(HttpStatus.UNAUTHORIZED)
-                .body(new AuthResponse(
-                        false,
-                        "Invalid username or password",
-                        null,
-                        null
-                ));
-    }
-}
-```
-
-You will need these imports:
-
-```java
-import com.src.userservice.model.User;
-import com.src.userservice.model.UserPrincipal;
-import org.springframework.security.core.Authentication;
-```
-
-### 2. Add `getUser()` to `UserPrincipal`
-
-Your current class has:
-
-```java
-private final User user;
-
-public UserPrincipal(User user) {
-    this.user = user;
-}
-```
-
-Add:
-
-```java
-public User getUser() {
-    return user;
-}
-```
-
-So the relevant part becomes:
-
-```java
-public class UserPrincipal implements UserDetails {
-
-    private final User user;
-
-    public UserPrincipal(User user) {
-        this.user = user;
+        if (product1 != null) {
+            return new ResponseEntity<>("Updated", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Failed to Update", HttpStatus.BAD_REQUEST);
+        }
     }
 
-    public User getUser() {
-        return user;
+    @DeleteMapping("/product/{id}")
+    public ResponseEntity<String> deleteProduct(@PathVariable int id) {
+        Product product = service.getProductById(id);
+        if(product != null) {
+            service.deleteProduct(id);
+            return new ResponseEntity<>("Deleted", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Product not found", HttpStatus.OK);
+        }
     }
 
-    // remaining UserDetails methods...
+    @GetMapping("/product/search")
+    public ResponseEntity<List<Product>> searchProducts(@RequestParam String keyword) {
+        List<Product> products = service.searchProducts(keyword);
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
+
 }
-```
-
-### Why this is better
-
-Your authentication flow now becomes:
-
-```text
-LoginRequest
-    |
-    | email + password
-    ↓
-AuthenticationManager
-    |
-    ↓
-MyUserDetailsService
-    |
-    ↓
-UserPrincipal
-    |
-    | contains User
-    ↓
-User
- ├── email = testadmin@in.com
- └── role  = ADMIN
-    |
-    ↓
-JwtService
-    |
-    ↓
-JWT
-```
-
-The JWT will now contain:
-
-```json
-{
-  "sub": "testadmin@in.com",
-  "role": "ADMIN",
-  "iat": 1788853980,
-  "exp": 1788855780
-}
-```
-
-This is exactly what your **Category Service** needs to authorize:
-
-```java
-.hasRole("ADMIN")
-```
-
-### One thing to verify
-
-Your `MyUserDetailsService` must be returning:
-
-```java
-return new UserPrincipal(user);
-```
-
-which, based on the code you've shown earlier, it already does.
-
-So you don't need another `UserDetailsService`, and you don't need to query the database again in the login controller.

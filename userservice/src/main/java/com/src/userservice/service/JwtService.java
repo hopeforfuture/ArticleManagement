@@ -23,10 +23,14 @@ public class JwtService {
 
         return Jwts.builder()
                 .subject(user.getEmail())
+                .claim("userId", user.getId())
                 .claim("role", user.getRole())
                 .issuedAt(new Date())
                 .expiration(
-                        new Date(System.currentTimeMillis() + 1000 * 60 * 30)
+                        new Date(
+                                System.currentTimeMillis()
+                                        + 1000 * 60 * 30
+                        )
                 )
                 .signWith(getKey())
                 .compact();
