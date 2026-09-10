@@ -54,14 +54,6 @@ public class ArticleController {
             Authentication authentication)
             throws IOException {
 
-        /*ObjectMapper objectMapper = new ObjectMapper();
-
-        ArticleRequest request =
-                objectMapper.readValue(
-                        articleJson,
-                        ArticleRequest.class
-                );*/
-
         Long userId =
                 (Long) authentication.getCredentials();
 
@@ -134,16 +126,11 @@ public class ArticleController {
     )
     public ResponseEntity<ArticleResponse> updateArticle(
             @PathVariable Long id,
-            @RequestPart("article") String articleJson,
+            @Valid @RequestPart("article") ArticleRequest request,
             @RequestPart(value = "image", required = false) MultipartFile image,
             Authentication authentication
     ) throws IOException {
-
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        ArticleRequest request =
-                objectMapper.readValue(articleJson, ArticleRequest.class);
-
+        
         Long userId =
                 (Long) authentication.getCredentials();
 
