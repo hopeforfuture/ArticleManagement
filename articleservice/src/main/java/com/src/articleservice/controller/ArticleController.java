@@ -130,7 +130,7 @@ public class ArticleController {
             @RequestPart(value = "image", required = false) MultipartFile image,
             Authentication authentication
     ) throws IOException {
-        
+
         Long userId =
                 (Long) authentication.getCredentials();
 
