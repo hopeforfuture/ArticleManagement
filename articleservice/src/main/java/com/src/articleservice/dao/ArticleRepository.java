@@ -15,4 +15,8 @@ public interface ArticleRepository
     List<Article> findByUserIdOrderByIdDesc(Long userId);
 
     List<Article> findByIsPublishedTrueOrderByIdDesc();
+
+    boolean existsBySlug(String slug);
+
+    boolean existsBySlugAndIdNot(String slug, Long id);
 }

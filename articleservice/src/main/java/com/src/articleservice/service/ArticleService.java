@@ -24,6 +24,8 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
     private final CategoryClient categoryClient;
     private final TagRepository tagRepository;
+    private final SlugService slugService;
+
     Set<String> allowedExtensions = Set.of(
             "jpg",
             "jpeg",
@@ -34,11 +36,13 @@ public class ArticleService {
     public ArticleService(
             ArticleRepository articleRepository,
             CategoryClient categoryClient,
-            TagRepository tagRepository) {
+            TagRepository tagRepository,
+            SlugService slugService) {
 
         this.articleRepository = articleRepository;
         this.categoryClient = categoryClient;
         this.tagRepository = tagRepository;
+        this.slugService = slugService;
     }
 
     private Set<Tag> getOrCreateTags(Set<String> tagNames) {
@@ -103,6 +107,12 @@ public class ArticleService {
         article.setTitle(request.getTitle());
         article.setBody(request.getBody());
         article.setCategoryId(request.getCategoryId());
+        String slug = slugService.generateUniqueSlug(
+                request.getTitle(),
+                articleRepository
+        );
+
+        article.setSlug(slug);
 
         // Get user ID from JWT
         article.setUserId(userId);
@@ -255,6 +265,19 @@ public class ArticleService {
         article.setTitle(request.getTitle());
         article.setBody(request.getBody());
         article.setCategoryId(request.getCategoryId());
+
+        System.out.println("Article Slug: " + article.getSlug());
+
+        if ((!article.getTitle().equals(request.getTitle())) || (article.getSlug().trim().isEmpty())) {
+
+            String newSlug = slugService.generateUniqueSlugForUpdate(
+                    request.getTitle(),
+                    article.getId(),
+                    articleRepository
+            );
+
+            article.setSlug(newSlug);
+        }
 
         if (image != null && !image.isEmpty()) {
 
@@ -412,6 +435,7 @@ public class ArticleService {
         return new ArticleResponse(
                 article.getId(),
                 article.getTitle(),
+                article.getSlug(),
                 article.getBody(),
                 article.getImageName(),
                 article.getImageType(),

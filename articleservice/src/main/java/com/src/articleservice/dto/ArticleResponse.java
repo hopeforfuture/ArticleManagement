@@ -13,6 +13,8 @@ public class ArticleResponse {
 
     private String title;
 
+    private String slug;
+
     private String body;
 
     private String imageName;

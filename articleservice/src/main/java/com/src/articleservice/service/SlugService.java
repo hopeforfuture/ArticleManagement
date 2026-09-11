@@ -1,3 +1,9 @@
+package com.src.articleservice.service;
+
+import com.github.slugify.Slugify;
+import com.src.articleservice.dao.ArticleRepository;
+import org.springframework.stereotype.Service;
+
 @Service
 public class SlugService {
 

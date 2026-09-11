@@ -5,8 +5,8 @@
 }
 
 {
-    "email" : "testadmin@in.com",
-    "password" : "aDmin@123!"
+    "email" : "rajkumar@in.com",
+    "password" : "tEst123456!"
 }
 
 {
@@ -15,15 +15,135 @@
 }
 
 {
-    "title": "Samsung Galaxy Series",
-    "body": "Samsung Galaxy is an awesome phone",
-    "categoryId": 4,
+    "title": "Best Practices for Web Application Security",
+    "body": "Secure authentication, authorization, input validation, and proper error handling are essential for protecting web applications.",
+    "categoryId": 11,
     "tags": [
-        "Smartphone",
-        "Samsung",
-        "Samsung Galaxy"
+        "Cybersecurity",
+        "Authentication",
+        "Web Security"
     ]
 }
+
+[
+    {
+        "id": 13,
+        "name": "Cloud Computing",
+        "parentId": 5,
+        "parentName": "Technical Knowledge",
+        "status": 1,
+        "createdAt": "2026-09-11T10:39:25",
+        "updatedAt": "2026-09-11T10:39:25"
+    },
+    {
+        "id": 12,
+        "name": "Microservices",
+        "parentId": 5,
+        "parentName": "Technical Knowledge",
+        "status": 1,
+        "createdAt": "2026-09-11T10:39:08",
+        "updatedAt": "2026-09-11T10:39:08"
+    },
+    {
+        "id": 11,
+        "name": "Cybersecurity",
+        "parentId": 5,
+        "parentName": "Technical Knowledge",
+        "status": 1,
+        "createdAt": "2026-09-11T10:38:49",
+        "updatedAt": "2026-09-11T10:38:49"
+    },
+    {
+        "id": 10,
+        "name": "React",
+        "parentId": 5,
+        "parentName": "Technical Knowledge",
+        "status": 1,
+        "createdAt": "2026-09-11T10:38:32",
+        "updatedAt": "2026-09-11T10:38:32"
+    },
+    {
+        "id": 9,
+        "name": "Artificial Intelligence",
+        "parentId": 5,
+        "parentName": "Technical Knowledge",
+        "status": 1,
+        "createdAt": "2026-09-11T10:38:18",
+        "updatedAt": "2026-09-11T10:38:18"
+    },
+    {
+        "id": 8,
+        "name": "Docker",
+        "parentId": 5,
+        "parentName": "Technical Knowledge",
+        "status": 1,
+        "createdAt": "2026-09-11T10:37:59",
+        "updatedAt": "2026-09-11T10:37:59"
+    },
+    {
+        "id": 7,
+        "name": "Mongodb",
+        "parentId": 5,
+        "parentName": "Technical Knowledge",
+        "status": 1,
+        "createdAt": "2026-09-11T10:37:51",
+        "updatedAt": "2026-09-11T10:37:51"
+    },
+    {
+        "id": 6,
+        "name": "Java",
+        "parentId": 5,
+        "parentName": "Technical Knowledge",
+        "status": 1,
+        "createdAt": "2026-09-11T10:37:43",
+        "updatedAt": "2026-09-11T10:37:43"
+    },
+    {
+        "id": 5,
+        "name": "Technical Knowledge",
+        "parentId": null,
+        "parentName": null,
+        "status": 1,
+        "createdAt": "2026-09-11T10:37:19",
+        "updatedAt": "2026-09-11T10:37:19"
+    },
+    {
+        "id": 4,
+        "name": "Smartphones",
+        "parentId": 1,
+        "parentName": "Electronics",
+        "status": 1,
+        "createdAt": "2026-09-08T16:56:56",
+        "updatedAt": "2026-09-08T16:56:56"
+    },
+    {
+        "id": 3,
+        "name": "Food and Beverages",
+        "parentId": null,
+        "parentName": null,
+        "status": 1,
+        "createdAt": "2026-09-08T16:40:18",
+        "updatedAt": "2026-09-08T17:06:31"
+    },
+    {
+        "id": 2,
+        "name": "Fashion",
+        "parentId": null,
+        "parentName": null,
+        "status": 1,
+        "createdAt": "2026-09-08T16:40:12",
+        "updatedAt": "2026-09-08T16:40:12"
+    },
+    {
+        "id": 1,
+        "name": "Electronics",
+        "parentId": null,
+        "parentName": null,
+        "status": 1,
+        "createdAt": "2026-09-08T16:38:12",
+        "updatedAt": "2026-09-08T16:38:12"
+    }
+]
 
 Now I would like to build category service but this will be role based. Only Admin can create,Update and Delete category. Other authenticated 
 users will be able to view(Single and List) Categories. In category table parent_id should be stored so that we can maintain parent/child 

@@ -33,6 +33,9 @@ public class Article {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String body;
 
+    @Column(nullable = false, unique = true, length = 255)
+    private String slug;
+
     private String imageName;
 
     private String imageType;
