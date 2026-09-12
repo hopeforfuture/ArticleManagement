@@ -80,7 +80,7 @@ public class SecurityConfig {
                                 HttpMethod.PUT,
                                 "/api/v1/articles/*/publish"
                         )
-                        .authenticated()
+                        .hasRole("ADMIN")
 
 
                         /*

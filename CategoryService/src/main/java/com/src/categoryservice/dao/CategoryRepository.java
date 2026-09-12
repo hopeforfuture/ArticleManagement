@@ -16,4 +16,8 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     );
 
     List<Category> findAllByOrderByIdDesc();
+
+    boolean existsBySlug(String slug);
+
+    boolean existsBySlugAndIdNot(String slug, Long id);
 }

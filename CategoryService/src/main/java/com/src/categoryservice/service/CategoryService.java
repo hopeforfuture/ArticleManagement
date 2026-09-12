@@ -13,9 +13,11 @@ import java.util.List;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final SlugService slugService;
 
-    public CategoryService(CategoryRepository categoryRepository) {
+    public CategoryService(CategoryRepository categoryRepository, SlugService slugService) {
         this.categoryRepository = categoryRepository;
+        this.slugService = slugService;
     }
 
     // CREATE
@@ -42,6 +44,12 @@ public class CategoryService {
         category.setName(request.getName());
         category.setParent(parent);
         category.setStatus(1);
+
+        String slug = slugService.generateUniqueSlug(
+                request.getName(),
+                categoryRepository
+        );
+        category.setSlug(slug);
 
         Category savedCategory =
                 categoryRepository.save(category);
@@ -80,44 +88,55 @@ public class CategoryService {
             Long id,
             CategoryRequest request) {
 
-        Category category =
-                categoryRepository.findById(id)
-                        .orElseThrow(() ->
-                                new RuntimeException(
-                                        "Category not found with id: "
-                                                + id
-                                )
-                        );
+            Category category =
+                    categoryRepository.findById(id)
+                            .orElseThrow(() ->
+                                    new RuntimeException(
+                                            "Category not found with id: "
+                                                    + id
+                                    )
+                            );
 
-        Category parent = null;
+            Category parent = null;
 
-        if (request.getParentId() != null) {
+            if (request.getParentId() != null) {
 
-            // Prevent category from becoming its own parent
-            if (id.equals(request.getParentId())) {
+                // Prevent category from becoming its own parent
+                if (id.equals(request.getParentId())) {
 
-                throw new RuntimeException(
-                        "Category cannot be its own parent"
+                    throw new RuntimeException(
+                            "Category cannot be its own parent"
+                    );
+                }
+
+                parent = categoryRepository.findById(
+                        request.getParentId()
+                ).orElseThrow(() ->
+                        new RuntimeException(
+                                "Parent category not found with id: "
+                                        + request.getParentId()
+                        )
                 );
             }
 
-            parent = categoryRepository.findById(
-                    request.getParentId()
-            ).orElseThrow(() ->
-                    new RuntimeException(
-                            "Parent category not found with id: "
-                                    + request.getParentId()
-                    )
-            );
-        }
+            category.setName(request.getName());
+            category.setParent(parent);
 
-        category.setName(request.getName());
-        category.setParent(parent);
+            if ((!category.getName().equals(request.getName())) || (category.getSlug().trim().isEmpty())) {
 
-        Category updatedCategory =
-                categoryRepository.save(category);
+                String newSlug = slugService.generateUniqueSlugForUpdate(
+                        request.getName(),
+                        category.getId(),
+                        categoryRepository
+                );
 
-        return convertToResponse(updatedCategory);
+                category.setSlug(newSlug);
+            }
+
+            Category updatedCategory =
+                    categoryRepository.save(category);
+
+            return convertToResponse(updatedCategory);
     }
 
     // DELETE
@@ -151,6 +170,7 @@ public class CategoryService {
         return new CategoryResponse(
                 category.getId(),
                 category.getName(),
+                category.getSlug(),
                 parentId,
                 parentName,
                 category.getStatus(),

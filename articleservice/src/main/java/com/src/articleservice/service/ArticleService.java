@@ -368,12 +368,12 @@ public class ArticleService {
                         );
 
         // Only owner can publish
-        if (!article.getUserId().equals(userId)) {
+        /*if (!article.getUserId().equals(userId)) {
 
             throw new RuntimeException(
                     "You are not allowed to publish this article"
             );
-        }
+        }*/
 
         article.setIsPublished(true);
 

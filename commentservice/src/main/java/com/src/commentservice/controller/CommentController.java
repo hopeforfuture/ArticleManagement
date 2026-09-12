@@ -47,12 +47,12 @@ public class CommentController {
 
         Long userId =
                 (Long) authentication
-                    .getCredentials();
+                        .getCredentials();
 
         CommentResponse response =
                 commentService.createComment(
-                    request,
-                    userId
+                        request,
+                        userId
                 );
 
         return ResponseEntity
@@ -77,13 +77,13 @@ public class CommentController {
 
         Long userId =
                 (Long) authentication
-                    .getCredentials();
+                        .getCredentials();
 
         CommentResponse response =
                 commentService.updateComment(
-                    id,
-                    request.getCommentBody(),
-                    userId
+                        id,
+                        request.getCommentBody(),
+                        userId
                 );
 
         return ResponseEntity.ok(response);
@@ -115,7 +115,7 @@ public class CommentController {
             @PathVariable Long id) {
 
         return ResponseEntity.ok(
-            commentService.blockComment(id)
+                commentService.blockComment(id)
         );
     }
 
@@ -129,7 +129,7 @@ public class CommentController {
             @PathVariable Long id) {
 
         return ResponseEntity.ok(
-            commentService.unblockComment(id)
+                commentService.unblockComment(id)
         );
     }
 
@@ -144,9 +144,9 @@ public class CommentController {
             @PathVariable Long articleId) {
 
         return ResponseEntity.ok(
-            commentService.getCommentsByArticle(
-                articleId
-            )
+                commentService.getCommentsByArticle(
+                        articleId
+                )
         );
     }
 }
