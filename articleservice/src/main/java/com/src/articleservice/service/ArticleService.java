@@ -1,9 +1,11 @@
 package com.src.articleservice.service;
 
 import com.src.articleservice.client.CategoryClient;
+import com.src.articleservice.client.CommentClient;
 import com.src.articleservice.dao.ArticleRepository;
 import com.src.articleservice.dao.TagRepository;
 import com.src.articleservice.dto.CategoryResponse;
+import com.src.articleservice.dto.CommentResponse;
 import com.src.articleservice.exception.ArticleNotFoundException;
 import com.src.articleservice.model.Article;
 import com.src.articleservice.model.Tag;
@@ -25,6 +27,7 @@ public class ArticleService {
     private final CategoryClient categoryClient;
     private final TagRepository tagRepository;
     private final SlugService slugService;
+    private final CommentClient commentClient;
 
     Set<String> allowedExtensions = Set.of(
             "jpg",
@@ -37,12 +40,14 @@ public class ArticleService {
             ArticleRepository articleRepository,
             CategoryClient categoryClient,
             TagRepository tagRepository,
-            SlugService slugService) {
+            SlugService slugService,
+            CommentClient commentClient) {
 
         this.articleRepository = articleRepository;
         this.categoryClient = categoryClient;
         this.tagRepository = tagRepository;
         this.slugService = slugService;
+        this.commentClient = commentClient;
     }
 
     private Set<Tag> getOrCreateTags(Set<String> tagNames) {
@@ -445,5 +450,19 @@ public class ArticleService {
                 article.getCreatedAt(),
                 article.getUpdatedAt()
         );
+    }
+
+    public List<CommentResponse> getCommentsByArticle(
+            Long articleId) {
+
+        // First verify that article exists
+        articleRepository.findById(articleId)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Article not found: " + articleId
+                        )
+                );
+
+        return commentClient.getComments(articleId);
     }
 }

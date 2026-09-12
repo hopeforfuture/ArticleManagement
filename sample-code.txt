@@ -14,6 +14,11 @@
     "password" : "aDmin@123!"
 }
 
+{
+    "commentBody": "This is a very useful article.",
+    "articleId": 1
+}
+
 Comment Service:
 Now I would like to build comment section as a service. 
 comments table should have following fields

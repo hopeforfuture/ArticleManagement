@@ -1,5 +1,6 @@
 package com.src.articleservice.controller;
 
+import com.src.articleservice.dto.CommentResponse;
 import com.src.articleservice.model.Article;
 import com.src.articleservice.service.ArticleService;
 import com.src.articleservice.validation.ArticleRequest;
@@ -12,11 +13,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.security.core.Authentication;
-
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -26,9 +24,7 @@ public class ArticleController {
 
     private final ArticleService articleService;
 
-    public ArticleController(
-            ArticleService articleService) {
-
+    public ArticleController(ArticleService articleService) {
         this.articleService = articleService;
     }
 
@@ -37,9 +33,7 @@ public class ArticleController {
     // CREATE
     // =====================================================
 
-    @PostMapping(
-            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
-    )
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ArticleResponse> createArticle(
 
          @Valid @RequestPart("article")
@@ -87,12 +81,9 @@ public class ArticleController {
 
     @GetMapping("/my")
     public ResponseEntity<List<ArticleResponse>>
-    getMyArticles(
-            Authentication authentication) {
+    getMyArticles(Authentication authentication) {
 
-        Long userId =
-                (Long) authentication.getCredentials();
-
+        Long userId = (Long) authentication.getCredentials();
         return ResponseEntity.ok(
                 articleService.getMyArticles(
                         userId
@@ -107,8 +98,7 @@ public class ArticleController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ArticleResponse>
-    getArticle(
-            @PathVariable Long id) {
+    getArticle(@PathVariable Long id) {
 
         return ResponseEntity.ok(
                 articleService.getArticle(id)
@@ -240,5 +230,16 @@ public class ArticleController {
                         )
                 )
                 .body(article.getImage());
+    }
+
+    @GetMapping("/{id}/comments")
+    public ResponseEntity<List<CommentResponse>>
+    getArticleComments(
+            @PathVariable Long id) {
+
+        List<CommentResponse> comments =
+                articleService.getCommentsByArticle(id);
+
+        return ResponseEntity.ok(comments);
     }
 }

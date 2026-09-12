@@ -92,7 +92,6 @@ public class SecurityConfig {
                         )
                         .hasRole("ADMIN")
 
-
                         /*
                          * Read operations.
                          */
@@ -101,8 +100,6 @@ public class SecurityConfig {
                                 "/api/v1/articles/**"
                         )
                         .permitAll()
-
-
                         .anyRequest()
                         .authenticated()
                 )
